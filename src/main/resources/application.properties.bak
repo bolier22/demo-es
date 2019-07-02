@@ -1,0 +1,39 @@
+#server.port=9123
+##节点名字，默认elasticsearch
+#spring.data.elasticsearch.cluster-name=elasticsearch
+##节点地址，多个节点用逗号隔开
+##注意java的es默认连接端口是9300，9200是http端口，这两个在使用中应注意区分 192.168.1.6:9300
+#spring.data.elasticsearch.cluster-nodes=10.8.3.166:9300
+##spring.data.elasticsearch.local=false
+##spring.data.elasticsearch.repositories.enable=true
+#spring.data.elasticsearch.repositories.enabled=true
+##spring.data.elasticsearch.properties.path.logs=./elasticsearch/log
+##spring.data.elasticsearch.properties.path.data=./elasticsearch/data
+#
+#
+## 主数据源，默认的
+#spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+#spring.datasource.url=jdbc:mysql://10.9.2.239:3306/eichong?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+#spring.datasource.username=root
+#spring.datasource.password=123456
+#
+## 更多数据源
+#custom.datasource.names=ds1,ds2
+#
+#custom.datasource.ds1.driver-class-name=com.mysql.jdbc.Driver
+#custom.datasource.ds1.url=jdbc:mysql://10.9.2.88:3306/eichong?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+#custom.datasource.ds1.username=root
+#custom.datasource.ds1.password=123456
+#
+#custom.datasource.ds2.driver-class-name=com.mysql.jdbc.Driver
+#custom.datasource.ds2.url=jdbc:mysql://10.9.2.58:3306/eichong?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+#custom.datasource.ds2.username=root
+#custom.datasource.ds2.password=123456
+#
+#mybatis.config-location=classpath:mybatis/mybatis-config.xml
+#mybatis.mapper-locaitons=classpath:mybatis/mappings/*Mapper.xml
+#mybatis.type-aliases-package=com.wanma.demoes.entity
+#
+#mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+##mybatis 返回结果集为map value等于null 不丢失
+#mybatis.configuration.call-setters-on-nulls=true

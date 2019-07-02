@@ -1,0 +1,59 @@
+https://blog.csdn.net/tianyaleixiaowu/article/details/76149547  批量插入百万级别数据
+
+https://blog.csdn.net/tianyaleixiaowu/article/details/77965257
+
+
+#network.host: 10.11.3.173
+#transport.tcp.port: 9300
+#transport.tcp.compress: true
+#http.port: 9100
+
+
+#https://www.baidu.com/s?wd=springboot2.1%20elasticsearch&rsv_spt=1&rsv_iqid=0xce4947ac00012a94&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&rqlang=cn&tn=baiduhome_pg&rsv_enter=1&oq=springboot%2520elasticsearch&rsv_t=b925FHphapkw2kbZhGTQeAb5wyRYSqUgoGlQ12nnDQgvJ3%2F9D51NfjO2V3aoKS9ohymQ&inputT=4719&rsv_sug3=15&rsv_sug1=11&rsv_sug7=100&rsv_pq=d4f38dc600018bd5&rsv_sug2=0&rsv_sug4=7012
+#https://blog.csdn.net/b376924098/article/details/79469423?ref=myread
+#https://www.cnblogs.com/liuxiaoming123/p/8081883.html
+#https://blog.csdn.net/ysk_xh_521/article/details/80572265
+
+
+
+elasticsearch client api
+
+    通过Query删除
+
+or and
+
+sql： select * from table where active=1 and ( name like '%？%' or code like '%?%' )
+elasticsearch 用java client怎么写呢？
+--------------------------------------
+QueryBuilder qb = QueryBuilders.boolQuery()
+.must(new QueryStringQueryBuilder("1").field("active"))
+.must(QueryBuilders.boolQuery()
+    .should(QueryBuilders.matchQuery("name", "小李子"))
+    .should(QueryBuilders.matchQuery("code", 小李子"))
+);
+
+in
+
+sql: select * from table where name in ('tom', 'john');
+QueryBuilder qb = QueryBuilders.boolQuery()
+List<String> list = new ArrayList<String>();
+list.add("tom");
+list.add("john");
+BoolQueryBuilder in = QueryBuilders.boolQuery();
+for(String name : list) {
+   in.shoud(QueryBuilders.matchPhraseQuery("name", name));
+}
+qb.must(in);
+
+打印dsl日志
+
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder()
+                .withQuery(boolQueryBuilder);
+        builder.withPageable(new PageRequest(param.getPageNo(), 20))
+                .withSort(new FieldSortBuilder("updateTime").order(SortOrder.DESC));
+        SearchQuery searchQuery = builder.build();
+        logger.info("QueryDSL:\n{}", searchQuery.getQuery().toString());
+
+
+
+

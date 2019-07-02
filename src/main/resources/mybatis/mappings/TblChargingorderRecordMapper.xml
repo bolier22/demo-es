@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wanma.demoes.mapper.TblChargingorderRecordMapper">
+    <resultMap id="BaseResultMap" type="TblChargingorderRecord">
+        <id column="pk_ChargingOrder" jdbcType="VARCHAR" property="pkChargingorder"/>
+        <result column="chOr_Code" property="chorCode"/>
+        <result column="chOr_Code_new" property="chorCodeNew"/>
+        <result column="chOr_PileNumber" property="chorPilenumber"/>
+        <result column="chOr_UserId" property="chorUserid"/>
+        <result column="chOr_Type" property="chorType"/>
+        <result column="chOr_Moeny" property="chorMoeny"/>
+        <result column="chOr_tipPower" property="chorTippower"/>
+        <result column="chOr_peakPower" property="chorPeakpower"/>
+        <result column="chOr_usualPower" property="chorUsualpower"/>
+        <result column="chOr_valleyPower" property="chorValleypower"/>
+        <result column="chOr_QuantityElectricity" property="chorQuantityelectricity"/>
+        <result column="chOr_TimeQuantum" property="chorTimequantum"/>
+        <result column="chOr_Muzzle" property="chorMuzzle"/>
+        <result column="chOr_ChargingStatus" property="chorChargingstatus"/>
+        <result column="chOr_TransType" property="chorTranstype"/>
+        <result column="chOr_Createdate" property="chorCreatedate"/>
+        <result column="chOr_Updatedate" property="chorUpdatedate"/>
+        <result column="chOr_TransactionNumber" property="chorTransactionnumber"/>
+        <result column="chOr_ChargeMoney" property="chorChargemoney"/>
+        <result column="chOr_ServiceMoney" property="chorServicemoney"/>
+        <result column="begin_charge_time" property="beginChargeTime"/>
+        <result column="end_charge_time" property="endChargeTime"/>
+        <result column="start_soc" property="startSoc"/>
+        <result column="end_soc" property="endSoc"/>
+        <result column="chOr_UserOrigin" property="chorUserorigin"/>
+        <result column="pk_UserCard" property="pkUsercard"/>
+        <result column="chOr_OrgNo" property="chorOrgno"/>
+        <result column="chOr_CouponMoney" property="chorCouponmoney"/>
+        <result column="pk_Coupon" property="pkCoupon"/>
+        <result column="chOr_Third_Type" property="chorThirdType"/>
+        <result column="chor_parter_user_logo" property="chorParterUserLogo"/>
+        <result column="chor_parter_extradata" property="chorParterExtradata"/>
+        <result column="bill_account_id" property="billAccountId"/>
+        <result column="cv_vin_code" property="cvVinCode"/>
+        <result column="reconciliation_status" property="reconciliationStatus"/>
+        <result column="reconciliation_id" property="reconciliationId"/>
+
+        <!-- record -->
+        <result column="chRe_ElectricPileID" jdbcType="INTEGER" property="chreElectricpileid"/>
+        <result column="chRe_ChargingMethod" jdbcType="INTEGER" property="chreChargingmethod"/>
+        <result column="chRe_Status" jdbcType="TINYINT" property="chreStatus"/>
+        <result column="chRe_JPrice" jdbcType="DECIMAL" property="chreJprice"/>
+        <result column="chRe_FPrice" jdbcType="DECIMAL" property="chreFprice"/>
+        <result column="chRe_PPrice" jdbcType="DECIMAL" property="chrePprice"/>
+        <result column="chRe_GPrice" jdbcType="DECIMAL" property="chreGprice"/>
+        <result column="chRe_FrozenAmt" jdbcType="DECIMAL" property="chreFrozenamt"/>
+        <result column="chRe_RealAmt" jdbcType="DECIMAL" property="chreRealamt"/>
+        <result column="chRe_PayMode" jdbcType="INTEGER" property="chrePaymode"/>
+        <result column="chRe_ServiceCharge" jdbcType="DECIMAL" property="chreServicecharge"/>
+        <result column="chRe_JMoney" jdbcType="DECIMAL" property="chreJmoney"/>
+        <result column="chRe_FMoney" jdbcType="DECIMAL" property="chreFmoney"/>
+        <result column="chRe_PMoney" jdbcType="DECIMAL" property="chrePmoney"/>
+        <result column="chRe_GMoney" jdbcType="DECIMAL" property="chreGmoney"/>
+        <result column="account_id" jdbcType="BIGINT" property="accountId"/>
+        <result column="chRe_TipPrice" jdbcType="DECIMAL" property="chreTipprice"/>
+        <result column="chRe_PeakPrice" jdbcType="DECIMAL" property="chrePeakprice"/>
+        <result column="chRe_FlatPrice" jdbcType="DECIMAL" property="chreFlatprice"/>
+        <result column="chRe_valleyPrice" jdbcType="DECIMAL" property="chreValleyprice"/>
+        <result column="chRe_TipMoney" jdbcType="DECIMAL" property="chreTipmoney"/>
+        <result column="chRe_PeakMoney" jdbcType="DECIMAL" property="chrePeakmoney"/>
+        <result column="chRe_FlatMoney" jdbcType="DECIMAL" property="chreFlatmoney"/>
+        <result column="chRe_valleyMoney" jdbcType="DECIMAL" property="chreValleymoney"/>
+        <result column="begin_hh" property="beginHh"/>
+        <result column="end_hh" property="endHh"/>
+        <result column="begin_charge_day" property="beginChargeDay"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ord.pk_ChargingOrder,
+        ord.chOr_Code,
+        ord.chOr_Code_new,
+        ord.chOr_PileNumber,
+        ord.chOr_UserId,
+        ord.chOr_Type,
+        ord.chOr_Moeny,
+        ord.chOr_tipPower,
+        ord.chOr_peakPower,
+        ord.chOr_usualPower,
+        ord.chOr_valleyPower,
+        ord.chOr_QuantityElectricity,
+        ord.chOr_TimeQuantum,
+        ord.chOr_Muzzle,
+        ord.chOr_ChargingStatus,
+        ord.chOr_TransType,
+        ord.chOr_Createdate,
+        ord.chOr_Updatedate,
+        ord.chOr_TransactionNumber,
+        ord.chOr_ChargeMoney,
+        ord.chOr_ServiceMoney,
+        ord.begin_charge_time,
+        ord.end_charge_time,
+        DATE_FORMAT( begin_charge_time ,'%Y-%m-%d') begin_charge_day,
+        DATE_FORMAT( ord.begin_charge_time ,'%H') begin_hh,
+		DATE_FORMAT( ord.end_charge_time ,'%H') end_hh,
+        ord.start_soc,
+        ord.end_soc,
+        ord.chOr_UserOrigin,
+        ord.pk_UserCard,
+        ord.chOr_OrgNo,
+        ord.chOr_CouponMoney,
+        ord.pk_Coupon,
+        ord.chOr_Third_Type,
+        ord.chor_parter_user_logo,
+        ord.chor_parter_extradata,
+        ord.bill_account_id,
+        ord.cv_vin_code,
+        ord.reconciliation_status,
+        ord.reconciliation_id,
+        rec.chRe_ElectricPileID,
+        rec.chRe_ChargingMethod,
+        rec.chRe_Status,
+        rec.chRe_JPrice,
+        rec.chRe_FPrice,
+        rec.chRe_PPrice,
+        rec.chRe_GPrice,
+        rec.chRe_FrozenAmt,
+        rec.chRe_RealAmt,
+        rec.chRe_PayMode,
+        rec.chRe_ServiceCharge,
+        IFNULL(rec.chRe_JMoney,0) chRe_JMoney,
+        IFNULL(rec.chRe_FMoney,0) chRe_FMoney,
+        IFNULL(rec.chRe_PMoney,0) chRe_PMoney,
+        IFNULL(rec.chRe_GMoney,0) chRe_GMoney,
+        rec.account_id,
+        IFNULL(rec.chRe_TipPrice,0) chRe_TipPrice,
+        IFNULL(rec.chRe_PeakPrice,0) chRe_PeakPrice,
+        IFNULL(rec.chRe_FlatPrice,0) chRe_FlatPrice,
+        IFNULL(rec.chRe_valleyPrice,0) chRe_valleyPrice,
+        IFNULL(rec.chRe_TipMoney,0) chRe_TipMoney,
+        IFNULL(rec.chRe_PeakMoney,0) chRe_PeakMoney,
+        IFNULL(rec.chRe_FlatMoney,0) chRe_FlatMoney,
+        IFNULL(rec.chRe_valleyMoney,0) chRe_valleyMoney
+    </sql>
+
+    <sql id="whereContion">
+        <where>
+            <if test="init == 0">
+                and date_format(ord.begin_charge_time,'%Y-%m') = #{beginChargeTime}
+            </if>
+            <if test="init == 1">
+                and date_format(ord.begin_charge_time,'%Y-%m-%d') = #{beginChargeTime}
+            </if>
+
+            <if test="queryFlag == 0">
+                and chOr_ChargingStatus IN (2, 3) and chOr_QuantityElectricity > 0
+            </if>
+
+            <if test="queryFlag == 1">
+                and chOr_ChargingStatus IN (1,4,5) and chOr_QuantityElectricity > 0
+            </if>
+
+            <if test="pkChargingorderIds != null and pkChargingorderIds.size() > 0">
+                and pk_ChargingOrder in
+                <foreach collection="pkChargingorderIds" item="pkChargingorder" open="(" close=")" separator=",">
+                    #{pkChargingorder}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectCountTblChargingorderRecord" parameterType="java.util.HashMap" resultType="int">
+        select count(1)  from tbl_chargingorder ord join tbl_chargingrecord rec on ord.chOr_TransactionNumber = rec.chRe_TransactionNumber
+        <include refid="whereContion"/>
+    </select>
+
+    <!-- 此处迁移数据按照天来进行 首次迁移需要使用以下sql
+    where ord.begin_charge_time &lt;= date_format(#{beginChargeTime},'%Y-%m-%d') and ord.pk_ChargingOrder &gt; #{pkChargingorder}
+    -->
+
+    <select id="selectTblChargingorderRecordList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_chargingorder ord join tbl_chargingrecord rec on ord.chOr_TransactionNumber = rec.chRe_TransactionNumber
+        <include refid="whereContion"/>
+        group by ord.pk_ChargingOrder order by ord.begin_charge_time asc
+        <if test="pager!=null">limit #{pager.offset},#{pager.pageSize}</if>
+    </select>
+
+    <!-- 首先查询出符合条件的数据id编号 -->
+    <select id="selectTblChargingorderRecordIdsList" parameterType="java.util.HashMap" resultType="java.lang.Long">
+        select
+        ord.pk_ChargingOrder
+        from tbl_chargingorder ord join tbl_chargingrecord rec on ord.chOr_TransactionNumber = rec.chRe_TransactionNumber
+        <include refid="whereContion"/>
+        order by ord.begin_charge_time asc
+        <if test="pager!=null">limit #{pager.offset},#{pager.pageSize}</if>
+    </select>
+
+    <delete id="deleteTblChargingorderRecord" parameterType="java.util.HashMap" >
+        delete from ${dbName}.${tableName}
+        <where>
+            <if test="beginChargeTime != null and endChargeTime != null">
+                and date_format(begin_charge_time,'%Y-%m-%d') between #{beginChargeTime} and #{endChargeTime}
+            </if>
+            <if test="pkChargingorderIds != null and pkChargingorderIds.size() > 0">
+                and pk_ChargingOrder in
+                <foreach collection="pkChargingorderIds" item="pkChargingorder" open="(" close=")" separator=",">
+                    #{pkChargingorder}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <insert id="insertBatchTblChargingorderRecordList" parameterType="java.util.HashMap">
+        insert into ${dbName}.${tableName} (
+        pk_ChargingOrder,
+        chOr_Code,
+        chOr_PileNumber,
+        chOr_UserId,
+        chOr_Type,
+        chOr_Moeny,
+        chOr_tipPower,
+        chOr_peakPower,
+        chOr_usualPower,
+        chOr_valleyPower,
+        chOr_QuantityElectricity,
+        chOr_TimeQuantum,
+        chOr_Muzzle,
+        chOr_ChargingStatus,
+        chOr_TransType,
+        chOr_Createdate,
+        chOr_Updatedate,
+        chOr_TransactionNumber,
+        chOr_ChargeMoney,
+        chOr_ServiceMoney,
+        begin_charge_time,
+        end_charge_time,
+        start_soc,
+        end_soc,
+        chOr_UserOrigin,
+        pk_UserCard,
+        chOr_OrgNo,
+        chOr_CouponMoney,
+        pk_Coupon,
+        chOr_Third_Type,
+        chor_parter_user_logo,
+        chor_parter_extradata,
+        bill_account_id,
+        cv_vin_code,
+        reconciliation_status,
+        reconciliation_id,
+        chRe_ElectricPileID,
+        chRe_ChargingMethod,
+        chRe_Status,
+        chRe_JPrice,
+        chRe_FPrice,
+        chRe_PPrice,
+        chRe_GPrice,
+        chRe_FrozenAmt,
+        chRe_RealAmt,
+        chRe_PayMode,
+        chRe_ServiceCharge,
+        chRe_JMoney,
+        chRe_FMoney,
+        chRe_PMoney,
+        chRe_GMoney,
+        account_id,
+        chRe_TipPrice,
+        chRe_PeakPrice,
+        chRe_FlatPrice,
+        chRe_valleyPrice,
+        chRe_TipMoney,
+        chRe_PeakMoney,
+        chRe_FlatMoney,
+        begin_hh,
+        end_hh,
+        begin_charge_day,
+        chRe_valleyMoney
+        )
+        values
+        <foreach collection="listChargingorder" item="item" index="index" separator="," >
+            (
+            #{item.pkChargingorder,jdbcType=BIGINT},
+            #{item.chorCode,jdbcType=VARCHAR},
+            #{item.chorPilenumber,jdbcType=VARCHAR},
+            #{item.chorUserid,jdbcType=INTEGER},
+            #{item.chorType,jdbcType=INTEGER},
+            #{item.chorMoeny,jdbcType=DECIMAL},
+            #{item.chorTippower,jdbcType=DECIMAL},
+            #{item.chorPeakpower,jdbcType=DECIMAL},
+            #{item.chorUsualpower,jdbcType=DECIMAL},
+            #{item.chorValleypower,jdbcType=DECIMAL},
+            #{item.chorQuantityelectricity,jdbcType=DECIMAL},
+            #{item.chorTimequantum,jdbcType=VARCHAR},
+            #{item.chorMuzzle,jdbcType=SMALLINT},
+            #{item.chorChargingstatus,jdbcType=INTEGER},
+            #{item.chorTranstype,jdbcType=INTEGER},
+            #{item.chorCreatedate,jdbcType=TIMESTAMP},
+            #{item.chorUpdatedate,jdbcType=TIMESTAMP},
+            #{item.chorTransactionnumber,jdbcType=VARCHAR},
+            #{item.chorChargemoney,jdbcType=DECIMAL},
+            #{item.chorServicemoney,jdbcType=DECIMAL},
+            #{item.beginChargeTime,jdbcType=VARCHAR},
+            #{item.endChargeTime,jdbcType=VARCHAR},
+            #{item.startSoc,jdbcType=INTEGER},
+            #{item.endSoc,jdbcType=INTEGER},
+            #{item.chorUserorigin,jdbcType=SMALLINT},
+            #{item.pkUsercard,jdbcType=INTEGER},
+            #{item.chorOrgno,jdbcType=INTEGER},
+            #{item.chorCouponmoney,jdbcType=DECIMAL},
+            #{item.pkCoupon,jdbcType=INTEGER},
+            #{item.chorThirdType,jdbcType=SMALLINT},
+            #{item.chorParterUserLogo,jdbcType=VARCHAR},
+            #{item.chorParterExtradata,jdbcType=VARCHAR},
+            #{item.billAccountId,jdbcType=BIGINT},
+            #{item.cvVinCode,jdbcType=VARCHAR},
+            #{item.reconciliationStatus,jdbcType=INTEGER},
+            #{item.reconciliationId,jdbcType=INTEGER},
+            #{item.chreElectricpileid,jdbcType=INTEGER},
+            #{item.chreChargingmethod,jdbcType=INTEGER},
+            #{item.chreStatus,jdbcType=TINYINT},
+            #{item.chreJprice,jdbcType=DECIMAL},
+            #{item.chreFprice,jdbcType=DECIMAL},
+            #{item.chrePprice,jdbcType=DECIMAL},
+            #{item.chreGprice,jdbcType=DECIMAL},
+            #{item.chreFrozenamt,jdbcType=DECIMAL},
+            #{item.chreRealamt,jdbcType=DECIMAL},
+            #{item.chrePaymode,jdbcType=INTEGER},
+            #{item.chreServicecharge,jdbcType=DECIMAL},
+            #{item.chreJmoney,jdbcType=DECIMAL},
+            #{item.chreFmoney,jdbcType=DECIMAL},
+            #{item.chrePmoney,jdbcType=DECIMAL},
+            #{item.chreGmoney,jdbcType=DECIMAL},
+            #{item.accountId,jdbcType=BIGINT},
+            #{item.chreTipprice,jdbcType=DECIMAL},
+            #{item.chrePeakprice,jdbcType=DECIMAL},
+            #{item.chreFlatprice,jdbcType=DECIMAL},
+            #{item.chreValleyprice,jdbcType=DECIMAL},
+            #{item.chreTipmoney,jdbcType=DECIMAL},
+            #{item.chrePeakmoney,jdbcType=DECIMAL},
+            #{item.chreFlatmoney,jdbcType=DECIMAL},
+            #{item.beginHh},
+            #{item.endHh},
+            #{item.beginChargeDay},
+            #{item.chreValleymoney,jdbcType=DECIMAL}
+            )
+        </foreach>
+    </insert>
+
+
+
+    <!--   *********************以上用于迁移数据  以下用户查询数据************************ -->
+
+    <sql id="Simple_Column_List">
+        pk_ChargingOrder,
+        chOr_Code,
+        chOr_Code_new,
+        chOr_PileNumber,
+        chOr_UserId,
+        chOr_Type,
+        chOr_Moeny,
+        chOr_tipPower,
+        chOr_peakPower,
+        chOr_usualPower,
+        chOr_valleyPower,
+        chOr_QuantityElectricity,
+        chOr_TimeQuantum,
+        chOr_Muzzle,
+        chOr_ChargingStatus,
+        chOr_TransType,
+        chOr_Createdate,
+        chOr_Updatedate,
+        chOr_TransactionNumber,
+        chOr_ChargeMoney,
+        chOr_ServiceMoney,
+        begin_charge_time,
+        end_charge_time,
+        begin_charge_day,
+        begin_hh,
+		end_hh,
+        start_soc,
+        end_soc,
+        chOr_UserOrigin,
+        pk_UserCard,
+        chOr_OrgNo,
+        chOr_CouponMoney,
+        pk_Coupon,
+        chOr_Third_Type,
+        chor_parter_user_logo,
+        chor_parter_extradata,
+        bill_account_id,
+        cv_vin_code,
+        reconciliation_status,
+        reconciliation_id,
+        chRe_ElectricPileID,
+        chRe_ChargingMethod,
+        chRe_Status,
+        chRe_JPrice,
+        chRe_FPrice,
+        chRe_PPrice,
+        chRe_GPrice,
+        chRe_FrozenAmt,
+        chRe_RealAmt,
+        chRe_PayMode,
+        chRe_ServiceCharge,
+        chRe_JMoney,
+        chRe_FMoney,
+        chRe_PMoney,
+        chRe_GMoney,
+        account_id,
+        chRe_TipPrice,
+        chRe_PeakPrice,
+        chRe_FlatPrice,
+        chRe_valleyPrice,
+        chRe_TipMoney,
+        chRe_PeakMoney,
+        chRe_FlatMoney,
+        chRe_valleyMoney
+    </sql>
+
+
+    <sql id="condition" >
+
+        <!-- 值为0则查询成功的订单 bsp使用  -->
+        <if test="chorChargingstatus != null and chorChargingstatus == 0">
+            and chOr_ChargingStatus in (2,3) and chOr_QuantityElectricity > 0
+        </if>
+
+        <!-- 有值则根据传入的值查询  -->
+        <if test="chorChargingstatus != null and chorChargingstatus != 0">
+            and chOr_ChargingStatus = #{chorChargingstatus}
+        </if>
+
+        <if test="userId !=null and userId !=''">
+            and chOr_PileNumber in (SELECT electricPile_code FROM ${dbName}.${tableNameOfMapping} WHERE user_id = #{userId}
+            <if test="powerStationId !=null and powerStationId !=''">
+                and powerstation_id = #{powerStationId}
+            </if>
+            )
+        </if>
+
+        <!-- 根据 0：开始时间或者 1：结束时间查询 -->
+        <if test="queryDateType == 0">
+            <if test="beginChargeTimeStart !=null and beginChargeTimeStart !=''">
+                and date_format(begin_charge_time,'%Y-%m-%d') &gt;= #{beginChargeTimeStart}
+            </if>
+            <if test="beginChargeTimeEnd !=null and beginChargeTimeEnd !=''">
+                and date_format(begin_charge_time,'%Y-%m-%d') &lt;= #{beginChargeTimeEnd}
+            </if>
+        </if>
+
+        <if test="queryDateType == 1">
+            <if test="beginChargeTimeStart !=null and beginChargeTimeStart !=''">
+                and date_format(end_charge_time,'%Y-%m-%d') &gt;= #{beginChargeTimeStart}
+            </if>
+            <if test="beginChargeTimeEnd !=null and beginChargeTimeEnd !=''">
+                and date_format(end_charge_time,'%Y-%m-%d') &lt;= #{beginChargeTimeEnd}
+            </if>
+        </if>
+
+        <if test="electricPileCode !=null and electricPileCode !=''">
+            and chOr_PileNumber = #{electricPileCode}
+        </if>
+
+        <if test="chorOrgno != null and chorOrgno !=0">
+            and chOr_OrgNo = #{chorOrgno}
+        </if>
+
+        <if test="cvVinCode != null and cvVinCode !=''">
+            and cv_vin_code = #{cvVinCode}
+        </if>
+
+        <if test="chorCode != null and chorCode !=''">
+            and INSTR (chOr_Code ,#{chorCode}) > 0
+        </if>
+
+        <if test="chorParterExtradata !=null and chorParterExtradata !=''">
+            and INSTR (chor_parter_extradata ,#{chorParterExtradata}) > 0
+        </if>
+        <if test="chorParterUserLogo !=null and chorParterUserLogo !=''">
+            and INSTR (chor_parter_user_logo ,#{chorParterUserLogo}) > 0
+        </if>
+        <if test="cpyNumberList != null and cpyNumberList.size() > 0">
+            and chOr_OrgNo in
+            <foreach collection="cpyNumberList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+        <if test="ucIdList != null and ucIdList.size() > 0">
+            and pk_UserCard in
+            <foreach collection="ucIdList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        <if test="userIdList != null and userIdList.size() > 0">
+            and chOr_UserId in
+            <foreach collection="userIdList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        <if test="epCodeList != null and epCodeList.size() > 0">
+            and chOr_PileNumber in
+            <foreach collection="epCodeList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+        <if test="orderFilter == 2">
+            and chOr_QuantityElectricity > 1 and chOr_ChargingStatus in (1,2,3)
+        </if>
+        <if test="ownUserIdList !=null and ownUserIdList.size()>0">
+            and chOr_UserId not in
+            <foreach collection="ownUserIdList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+
+    </sql>
+
+    <select id="selectOrderDataCount" parameterType="TblChargingorderRecord" resultType="Long">
+        select count(1) from ${dbName}.${tableName}
+        <where>
+            <include refid="condition"/>
+        </where>
+    </select>
+
+    <select id="selectOrderDataList" parameterType="TblChargingorderRecord" resultMap="BaseResultMap">
+        select
+        <include refid="Simple_Column_List"/>
+        from ${dbName}.${tableName}
+        <where>
+            <include refid="condition"/>
+        </where>
+        ORDER BY pk_ChargingOrder DESC
+        <if test="pager!=null">
+            limit #{pager.offsetEx},#{pager.pageSize}
+        </if>
+    </select>
+
+    <select id="selectOrderDataListNewCount" resultType="int">
+        select count(1) from eichong_stat_2019.tbl_charging_order_record_05
+    </select>
+
+    <select id="selectOrderDataListNew" resultMap="BaseResultMap">
+        select
+        <include refid="Simple_Column_List"/>
+        from eichong_stat_2019.tbl_charging_order_record_05 ORDER BY pk_ChargingOrder DESC
+        <if test="pager!=null">
+            limit #{pager.offsetEx},#{pager.pageSize}
+        </if>
+    </select>
+
+</mapper>

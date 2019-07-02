@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wanma.demoes.mapper.TblUserAdminMapper" >
+	<select id="getList" resultType="TblUserAdmin">
+        SELECT * FROM city limit #{start},#{count}
+    </select>
+
+	<select id="getList2" resultType="TblUserAdmin">
+        SELECT * FROM city limit #{start},#{count}
+    </select>
+
+	<select id="getList3" resultType="TblUserAdmin">
+        SELECT * FROM city limit #{start},#{count}
+    </select>
+
+    <update id="update1">
+        update city set name = 'Adana.111111' where id = 6
+    </update>
+
+
+    <update id="update2">
+        update city set name = 'Adana.22222' where id = 2
+    </update>
+
+    <update id="update3">
+        update city set name = 'Adana.33333' where id = 3
+    </update>
+
+</mapper>  

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wanma.demoes.mapper.HandleDBCommonMapper">
+
+  <!-- 直接执行sql
+      delete from tbl_chargingorder where pk_chargingOrder = 8878
+      update tbl_chargingorder set chor_code = '222222' where pk_chargingOrder = 8878
+
+  <update id="executeStatement" parameterType="String">
+      ${executeStatement}
+    </update>
+   -->
+
+  <!-- 根据库前缀名称查询数据库名称列表   -->
+  <select id="selectStatDbNameList" resultType="java.lang.String">
+        select SCHEMA_NAME from information_schema.SCHEMATA where LCASE(SCHEMA_NAME) like 'eichong_stat_%'
+    </select>
+
+  <select id="selectChargingorderExtractTableNameList" resultType="java.lang.String">
+        select table_name from information_schema.TABLES where LCASE(table_name) like 'tbl_chargingorder_extract_%' and table_schema = '${dbName}'
+    </select>
+
+
+
+  <!-- 根据库名查询表是否存在   'eichong_stat' -->
+  <select id="existsDB" resultType="Integer" parameterType="String">
+        select count(1) from information_schema.SCHEMATA where LCASE(SCHEMA_NAME) = '${dbName}'
+    </select>
+
+  <!-- 根据库名创建数据库 -->
+  <update id="createDB" parameterType="String">
+      CREATE DATABASE ${dbName} CHARACTER SET 'utf8' COLLATE 'utf8_general_ci'
+    </update>
+
+
+  <!-- 根据表名查询表是否存在   -->
+  <select id="existsTable" resultType="Integer" parameterType="java.util.HashMap">
+        select count(1) from information_schema.TABLES where LCASE(table_name)= #{tableName} and table_schema = #{dbName}
+  </select>
+
+  <update id="createCpyOrderExtract" parameterType="Map">
+       CREATE TABLE ${dbName}.${tableName} (
+          `cpy_number` int(11) NOT NULL COMMENT '公司标识',
+          `charge_day` varchar(10) NOT NULL COMMENT '充电时间 精确到天',
+          `order_count` bigint(20) NOT NULL COMMENT '订单条数',
+          `charge_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '充电时长 单位秒',
+          `charge_capacity` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '总电量',
+          `total_money` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '总金额',
+          `charge_money` decimal(20,4) NOT NULL COMMENT '总电费金额',
+          `service_money` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '总服务费金额',
+          `coupon_money` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '优惠券金额',
+          `tip_power` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '尖时段用电度数',
+          `peak_power` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '峰时段用电度数',
+          `flat_power` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '平时段用电度数',
+          `valley_power` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '谷时段用电度数',
+          `tip_money` decimal(8,4) DEFAULT '0.0000' COMMENT '尖电费',
+          `peak_money` decimal(8,4) DEFAULT '0.0000' COMMENT '峰电费',
+          `flat_money` decimal(8,4) DEFAULT '0.0000' COMMENT '平电费',
+          `valley_money` decimal(8,4) DEFAULT '0.0000' COMMENT '谷电费',
+          UNIQUE KEY `cpy_day` (`cpy_number`,`charge_day`) USING BTREE,
+          KEY `cpy_number` (`cpy_number`) USING BTREE,
+          KEY `charge_day` (`charge_day`) USING BTREE
+       ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公司订单提取数据表';
+  </update>
+
+  <!-- 此处只复制表结构 `tbl_chargingorder_extract_1801`-->
+  <update id="createChargingorderExtract" parameterType="java.util.HashMap">
+        CREATE TABLE ${dbName}.${tableName} (
+          `electric_pile_code` varchar(50) NOT NULL COMMENT '主键电桩编号',
+          `powerStationId` int(11) DEFAULT '0' COMMENT '电站编号',
+          `charge_day` varchar(10) NOT NULL COMMENT '充电时间 精确到天',
+          `order_count` bigint(20) NOT NULL COMMENT '订单条数',
+          `charge_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '充电时长 单位秒',
+          `charge_capacity` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '总电量',
+          `total_money` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '总金额',
+          `charge_money` decimal(20,4) NOT NULL COMMENT '总电费金额',
+          `service_money` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '总服务费金额',
+          `coupon_money` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '优惠券金额',
+          `pk_ChargingOrderIds` longtext COMMENT '参与统计的编号id',
+          `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '数据更新时间',
+          UNIQUE KEY `electric_pile_code` (`electric_pile_code`,`charge_day`),
+          KEY `pile_code` (`electric_pile_code`) USING BTREE COMMENT '电桩编号',
+          KEY `charge_day` (`charge_day`) USING BTREE COMMENT '充电时间'
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充电订单按桩和日的维度统计按月存储'
+    </update>
+
+
+  <!-- 创建订单数据表结构order-record-->
+  <update id="createChargingOrderRecord" parameterType="java.util.HashMap">
+        CREATE TABLE ${dbName}.${tableName} (
+          `pk_ChargingOrder` bigint(20) NOT NULL COMMENT '主键',
+          `chOr_Code` varchar(50) NOT NULL DEFAULT '' COMMENT '充电订单编号',
+          `chOr_PileNumber` varchar(50) NOT NULL DEFAULT '' COMMENT '桩体编号',
+          `chOr_UserId` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID(企业ID)',
+          `chOr_TransactionNumber` varchar(50) NOT NULL DEFAULT '' COMMENT '交易流水号',
+          `chOr_OrgNo` int(11) NOT NULL DEFAULT '1000' COMMENT '充电伙伴标识，1000:爱充自己，其它',
+          `chOr_Type` int(11) NOT NULL DEFAULT '0' COMMENT '1：普通用户 2：个体商家用户 3：纯商家用户',
+          `chOr_Moeny` decimal(10,4) DEFAULT '0.00' COMMENT '总(收益)金额',
+          `chOr_tipPower` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '尖时段用电度数',
+          `chOr_peakPower` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '峰时段用电度数',
+          `chOr_usualPower` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '平时段用电度数',
+          `chOr_valleyPower` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '谷时段用电度数',
+          `chOr_QuantityElectricity` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '总电量',
+          `chOr_TimeQuantum` varchar(50) NOT NULL DEFAULT '' COMMENT '12:00-13:00 时间段',
+          `chOr_Muzzle` smallint(50) NOT NULL DEFAULT '0' COMMENT '枪口编号(1,2,3……)',
+          `chOr_ChargingStatus` int(11) NOT NULL DEFAULT '0' COMMENT '1：待支付 ,2：支付成功 ,3: 完成操作,4: 异常订单,5:临时结算',
+          `chOr_TransType` int(11) NOT NULL DEFAULT '0' COMMENT '0:正常;1:断网上传;2:离线充上传',
+          `chOr_Createdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+          `chOr_Updatedate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+          `chOr_ChargeMoney` decimal(10,4) DEFAULT '0.00' COMMENT '充电金额',
+          `chOr_ServiceMoney` decimal(10,4) DEFAULT '0.00' COMMENT '充电服务费金额',
+          `begin_charge_time` varchar(32) NOT NULL DEFAULT '' COMMENT '充电开始时间',
+          `begin_charge_day` char(10) DEFAULT '' COMMENT '充电开始时间日期',
+          `end_charge_time` varchar(32) NOT NULL DEFAULT '' COMMENT '充电结束时间',
+          `begin_hh` char(2) DEFAULT '' COMMENT '开始小时',
+          `end_hh` char(2) DEFAULT '' COMMENT '结束小时',
+          `start_soc` int(11) NOT NULL DEFAULT '0' COMMENT '开始SOC(电池容量)',
+          `end_soc` int(11) NOT NULL DEFAULT '0' COMMENT '结束SOC(电池容量)',
+          `chOr_UserOrigin` smallint(4) NOT NULL DEFAULT '0' COMMENT '用户来源 1:富士康; 2:吉利; 3:绿地; 4:浙誉; 5:车纷享; 以后根据情况再扩展或修改',
+          `pk_UserCard` int(11) NOT NULL DEFAULT '0' COMMENT '卡主键',
+          `chOr_CouponMoney` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '优惠券抵扣金额',
+          `pk_Coupon` int(11) NOT NULL DEFAULT '0' COMMENT '第三方优惠信息主键',
+          `chOr_Third_Type` smallint(1) unsigned NOT NULL DEFAULT '0' COMMENT ' 默认 0 无优惠  优惠券 1 VIN码 2',
+          `chor_parter_user_logo` varchar(30) NOT NULL DEFAULT '' COMMENT '第三方合作方用户标识',
+          `chor_parter_extradata` varchar(50) NOT NULL DEFAULT '' COMMENT '第三方流水号或者会话ID',
+          `bill_account_id` bigint(11) NOT NULL DEFAULT '0' COMMENT '科目ID',
+          `cv_vin_code` varchar(20) NOT NULL DEFAULT '' COMMENT 'VIN',
+          `reconciliation_id` int(11) NOT NULL DEFAULT '0' COMMENT '第三方对账id',
+          `reconciliation_status` int(4) NOT NULL DEFAULT '0' COMMENT '0:未对账 1：订单正常，2：订单异常',
+          `chRe_ElectricPileID` int(11) NOT NULL DEFAULT '0' COMMENT '电桩ID(tbl_ElectricPile中获取)',
+          `chRe_ChargingMethod` int(11) NOT NULL DEFAULT '0' COMMENT '1:自动充满 2:按金额充 3:按里程4:按度数',
+          `chRe_Status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '充电状态,0:开始充电;1:结束充电;2:接受到充电客户的命令;3:充电失败,4:等待插枪;5:临时结算;6:结算;7:结算完成;',
+          `chRe_JPrice` decimal(8,4) DEFAULT '0.00',
+          `chRe_FPrice` decimal(8,4) DEFAULT '0.00',
+          `chRe_PPrice` decimal(8,4) DEFAULT '0.00',
+          `chRe_GPrice` decimal(8,4) DEFAULT '0.00',
+          `chRe_FrozenAmt` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '预冻结金额',
+          `chRe_RealAmt` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '实际金额(服务器重启后记录)',
+          `chRe_PayMode` int(11) NOT NULL DEFAULT '1' COMMENT '付费标识，1:先付费;2:后付费',
+          `chRe_ServiceCharge` decimal(8,4) DEFAULT '0.00'  COMMENT '服务费单价',
+          `chRe_JMoney` decimal(8,4) DEFAULT '0.00' COMMENT '尖金额=单价x度数',
+          `chRe_FMoney` decimal(8,4) DEFAULT '0.00' COMMENT '峰金额=单价x度数',
+          `chRe_PMoney` decimal(8,4) DEFAULT '0.00' COMMENT '平金额=单价x度数',
+          `chRe_GMoney` decimal(8,4) DEFAULT '0.00' COMMENT '谷金额=单价x度数',
+          `account_id` bigint(11) NOT NULL DEFAULT '0' COMMENT '帐户ID',
+          `chRe_TipPrice` decimal(8,4) DEFAULT '0.00' COMMENT '个性化尖电价',
+          `chRe_PeakPrice` decimal(8,4) DEFAULT '0.00' COMMENT '个性化峰电价',
+          `chRe_FlatPrice` decimal(8,4) DEFAULT '0.00' COMMENT '个性化平电价',
+          `chRe_valleyPrice` decimal(8,4) DEFAULT '0.00' COMMENT '个性化谷电价',
+          `chRe_TipMoney` decimal(8,4) DEFAULT '0.00' COMMENT '个性化尖服务费',
+          `chRe_PeakMoney` decimal(8,4) DEFAULT '0.00' COMMENT '个性化峰服务费',
+          `chRe_FlatMoney` decimal(8,4) DEFAULT '0.00' COMMENT '个性化平服务费',
+          `chRe_valleyMoney` decimal(8,4) DEFAULT '0.00' COMMENT '个性化谷服务费',
+          `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '数据更新时间',
+          UNIQUE KEY `pk_ChargingOrder` (`pk_ChargingOrder`),
+          KEY `chor_parter_extradata` (`chor_parter_extradata`),
+          KEY `idx_chor_pk_coupon` (`pk_Coupon`),
+          KEY `idx_chor_usercard` (`pk_UserCard`),
+          KEY `idx_chor_userid` (`chOr_UserId`),
+          KEY `index_chargingorder_Code` (`chOr_Code`),
+          KEY `index_chargingorder_PileNumber` (`chOr_PileNumber`),
+          KEY `begin_hh` (`begin_hh`),
+          KEY `end_hh` (`end_hh`),
+          KEY `begin_charge_day` (`begin_charge_day`),
+          KEY `index_chor_TransactionNumber` (`chOr_TransactionNumber`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=320 COMMENT='充电消费订单';
+    </update>
+
+
+  <!-- 创建bspUser和electr电桩之间的关系表 -->
+  <update id="createBspUserElectricpileMapping" parameterType="java.util.HashMap">
+        CREATE TABLE ${dbName}.${tableName} (
+          `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'bsp用户id',
+          `electricPile_id` int(11) NOT NULL DEFAULT '0' COMMENT '电桩id',
+          `electricPile_code` varchar(50) NOT NULL DEFAULT '' COMMENT '电桩code',
+          `powerStation_id` bigint(20) DEFAULT '0' COMMENT '电站id',
+          KEY `userid` (`user_id`),
+          KEY `electricPile_id` (`electricPile_id`) USING BTREE,
+          KEY `electricPile_code` (`electricPile_code`) USING BTREE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='bsp用户与电桩关系表 用于使用join关联其他表避免使用in查询';
+    </update>
+
+  <!-- 创建bspUser的年月数据统计信息
+   `tbl_chargingorder_bsp_user_year_extract`
+   -->
+  <update id="createTblChargingorderExtractBspUserYear" parameterType="java.util.HashMap">
+        CREATE TABLE ${dbName}.${tableName} (
+            `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+            `user_id` bigint(11) NOT NULL DEFAULT '0' COMMENT '继承主表ID',
+            `pile_id_key` varchar(50) NOT NULL DEFAULT '' COMMENT '桩id的Md5加密key用于判断是否修改过桩权限',
+            `charge_day` varchar(10) NOT NULL DEFAULT '' COMMENT '充电时间(月份)',
+            `order_count` bigint(20) NOT NULL COMMENT '订单条数',
+            `charge_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '充电时长 单位秒',
+            `charge_capacity` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '总电量',
+            `total_money` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '总金额',
+            `charge_money` decimal(20,4) NOT NULL COMMENT '总电费金额',
+            `service_money` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '总服务费金额',
+            `coupon_money` decimal(20,4) NOT NULL DEFAULT '0.0000' COMMENT '优惠券金额',
+            `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '数据更新时间',
+            PRIMARY KEY (`id`),
+            `type` tinyint(2) DEFAULT '0' COMMENT '0:月统计数据 1:年统计数据',
+            KEY `charge_day` (`charge_day`) USING BTREE COMMENT '充电时间',
+            KEY `user_id` (`user_id`) USING BTREE,
+            KEY `pile_id_key` (`pile_id_key`) USING BTREE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充电订单按账户拥有的桩和年月的维度统计';
+    </update>
+</mapper>
